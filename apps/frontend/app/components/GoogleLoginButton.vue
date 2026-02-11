@@ -1,0 +1,23 @@
+<script setup lang="ts">
+import googleIconUrl from '../assets/icon/google.svg';
+
+const { startGoogleLogin } = useAuth();
+</script>
+
+<template>
+  <Button
+    raised
+    outlined
+    rounded
+    severity="contrast"
+    size="small"
+    @click="startGoogleLogin"
+  >
+    <img
+      :src="googleIconUrl"
+      alt="google"
+      class="w-5 h-5"
+    />
+    <p>Sign in with Google</p>
+  </Button>
+</template>

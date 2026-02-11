@@ -1,0 +1,9 @@
+{
+  "targets": {
+    "serve": {
+      "configurations": {
+        "development": { "envFile": ".env" }
+      }
+    }
+  }
+}

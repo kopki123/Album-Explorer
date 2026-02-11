@@ -1,0 +1,132 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Brackets, Repository } from 'typeorm';
+import { AlbumEntity } from '../albums/entities/album.entity';
+
+type ListArgs = { q?: string; sort?: string; page: number; pageSize: number };
+
+function toPublicAlbum(a: AlbumEntity) {
+  return {
+    id: a.id,         // ✅ 仍回傳 id
+    slug: a.slug,     // ✅ 前端路由用 slug
+    title: a.title,
+    artistName: a.artistName,
+    releaseDate: a.releaseDate,
+    description: a.description,
+    durationMs: a.durationMs,
+    coverUrl: a.coverUrl,
+    wikiUrl: a.wikiUrl,
+  };
+}
+
+@Injectable()
+export class AlbumsService {
+  constructor(@InjectRepository(AlbumEntity) private albums: Repository<AlbumEntity>) {}
+
+  async list(args: ListArgs) {
+    const page = Math.max(1, args.page);
+    const pageSize = Math.min(100, Math.max(1, args.pageSize));
+
+    const qb = this.albums.createQueryBuilder('a');
+
+    if (args.q) {
+      const keyword = `%${args.q}%`;
+      qb.andWhere(
+        new Brackets((b) => {
+          b.where('a.title ILIKE :keyword', { keyword })
+            .orWhere('a.artistName ILIKE :keyword', { keyword });
+        }),
+      );
+    }
+
+    switch (args.sort) {
+      case 'releaseDate_asc':
+        qb.orderBy('a.releaseDate', 'ASC');
+        break;
+      case 'title_asc':
+        qb.orderBy('a.title', 'ASC');
+        break;
+      default:
+        qb.orderBy('a.releaseDate', 'DESC');
+    }
+
+    qb.skip((page - 1) * pageSize).take(pageSize);
+
+    qb.leftJoinAndSelect('a.genres', 'g')
+      .leftJoinAndSelect('a.tracks', 't')
+      .addOrderBy('t.trackNo', 'ASC');
+    const [items, total] = await qb.getManyAndCount();
+    return {
+      data: {
+        items: items.map((album) => ({
+          ...toPublicAlbum(album),
+          genres: album.genres?.map((x) => ({ id: x.id, name: x.name, slug: x.slug })) ?? [],
+          tracks: album.tracks?.map((x) => ({
+            id: x.id,
+            trackNo: x.trackNo,
+            title: x.title,
+            durationMs: x.durationMs,
+          })) ?? [],
+        })),
+      },
+      meta: {
+        pagination: {
+          page,
+          pageSize,
+          total,
+        },
+      },
+    };
+  }
+
+  async detailById(id: number) {
+    const album = await this.albums.findOne({ where: { id } });
+
+    if (!album) throw new NotFoundException('Album not found');
+
+    return toPublicAlbum(album);
+  }
+
+  async detailBySlug(slug: string) {
+    const album = await this.albums
+      .createQueryBuilder('a')
+      .leftJoinAndSelect('a.genres', 'g')
+      .leftJoinAndSelect('a.tracks', 't')
+      .where('a.slug = :slug', { slug })
+      .orderBy('t.trackNo', 'ASC')
+      .getOne();
+
+    if (!album) throw new NotFoundException('Album not found');
+
+    return {
+      id: album.id,
+      slug: album.slug,
+      title: album.title,
+      artistName: album.artistName,
+      releaseDate: album.releaseDate,
+      description: album.description,
+      durationMs: album.durationMs,
+      coverUrl: album.coverUrl,
+      wikiUrl: album.wikiUrl,
+      genres: album.genres?.map((x) => ({ id: x.id, name: x.name, slug: x.slug })) ?? [],
+      tracks: album.tracks?.map((x) => ({
+        id: x.id,
+        trackNo: x.trackNo,
+        title: x.title,
+        durationMs: x.durationMs,
+      })) ?? [],
+    };
+  }
+
+  async randomOne() {
+    const album = await this.albums
+      .createQueryBuilder('a')
+      .orderBy('RANDOM()')
+      .limit(1)
+      .getOne();
+
+    if (!album) throw new NotFoundException('No albums found');
+
+    return toPublicAlbum(album);
+  }
+}
