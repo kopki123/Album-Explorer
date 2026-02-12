@@ -11,8 +11,6 @@ import { AlbumsModule } from '../modules/albums/albums.module';
 import { AuthModule } from '../modules/auth/auth.module';
 import { MeModule } from '../modules/me/me.module';
 
-
-
 @Module({
   imports: [
     CacheModule.register({
