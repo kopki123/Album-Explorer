@@ -47,28 +47,26 @@ import { MeModule } from '../modules/me/me.module';
     //   }),
     // }),
 
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (cfg: ConfigService) => {
-        const isProd = cfg.get<string>('NODE_ENV') === 'production';
-        const url = cfg.get<string>('DATABASE_URL');
+  TypeOrmModule.forRootAsync({
+    inject: [ConfigService],
+    useFactory: (cfg: ConfigService) => {
+      const isProd = cfg.get('NODE_ENV') === 'production';
+      const url = cfg.get<string>('DATABASE_URL');
+      if (!url) throw new Error('Missing DATABASE_URL');
 
-        if (!url) throw new Error('Missing DATABASE_URL');
+      return {
+        type: 'postgres',
+        url,
+        // ✅ demo：先關掉憑證鏈驗證
+        ssl: isProd ? { rejectUnauthorized: false } : undefined,
 
-        return {
-          type: 'postgres',
-          url, // ✅ Supabase 連線字串（建議用 pooler transaction mode）
-          ssl: isProd ? { rejectUnauthorized: true } : undefined, // ✅ 需要 SSL 時開
-          autoLoadEntities: true,
-          synchronize: !isProd, // prod 用 migrations
-          logging: !isProd,
-          // 可選：限制連線池（Cloud Run demo 很有用）
-          extra: {
-            max: Number(cfg.get<string>('DB_POOL_MAX') ?? 5),
-          },
-        };
-      },
-    }),
+        autoLoadEntities: true,
+        synchronize: !isProd,
+        logging: !isProd,
+        extra: { max: Number(cfg.get('DB_POOL_MAX') ?? 5) },
+      };
+    },
+  }),
 
     HealthModule,
 
