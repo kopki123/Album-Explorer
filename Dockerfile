@@ -6,7 +6,7 @@ COPY nx.json tsconfig.base.json ./
 RUN npm install
 
 COPY . .
-RUN nx run @org/backend:serve --configuration=production
+RUN nx run @org/backend:build --configuration=production
 
 
 FROM node:20-alpine AS runner
