@@ -87,6 +87,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "swagger-ui-express": "^5.0.1",
+    "swc-loader": "^0.2.7",
     "tailwindcss-primeui": "^0.6.1",
     "typeorm": "^0.3.28",
     "vite-tsconfig-paths": "^6.1.0",

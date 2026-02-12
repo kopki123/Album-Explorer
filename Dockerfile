@@ -6,14 +6,14 @@ COPY nx.json tsconfig.base.json ./
 RUN npm install
 
 COPY . .
-RUN npx nx build backend --configuration=production --outputPath=dist/apps/backend
-RUN test -f dist/apps/backend/main.js
+RUN nx run @org/backend:serve --configuration=production
+
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY --from=build /workspace/dist/apps/backend ./dist
+COPY --from=build /workspace/apps/backend/dist ./dist
 COPY --from=build /workspace/node_modules ./node_modules
 
 EXPOSE 8080

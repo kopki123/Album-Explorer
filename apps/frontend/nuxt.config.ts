@@ -24,7 +24,7 @@ export default defineNuxtConfig({
     'primeicons/primeicons.css'
   ],
   vite: {
-    plugins: [nxViteTsPaths()],
+    plugins: [nxViteTsPaths() as any],
   },
 
   runtimeConfig: {
