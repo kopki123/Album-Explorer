@@ -3,7 +3,7 @@ WORKDIR /workspace
 
 COPY package.json package-lock.json ./
 COPY nx.json tsconfig.base.json ./
-RUN npm run install
+RUN npm install
 
 COPY . .
 RUN npx nx build backend --configuration=production --outputPath=dist/apps/backend
