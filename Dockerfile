@@ -5,6 +5,7 @@ WORKDIR /workspace
 # 先裝依賴（npm）
 COPY package.json package-lock.json ./
 COPY nx.json tsconfig.base.json ./
+RUN npm install
 RUN npm ci
 
 # 再複製全部程式碼並 build backend
