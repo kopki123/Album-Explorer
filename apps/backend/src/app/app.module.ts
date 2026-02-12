@@ -56,7 +56,7 @@ import { MeModule } from '../modules/me/me.module';
         type: 'postgres',
         url,
         // ✅ demo：先關掉憑證鏈驗證
-        ssl: isProd ? { rejectUnauthorized: false } : undefined,
+        ssl: { rejectUnauthorized: true },
 
         autoLoadEntities: true,
         synchronize: !isProd,
