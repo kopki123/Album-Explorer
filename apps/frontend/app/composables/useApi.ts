@@ -22,7 +22,7 @@ export const useApi = () => {
     path: string,
     options: ApiFetchOptions<T> = {},
   ): Promise<ApiResponse<T> | T> => {
-    const { auth = false, retryOn401 = true, credentials = true, ...rest } = options;
+    const { auth = false, retryOn401 = true, ...rest } = options;
     const headers = new Headers((rest.headers || {}) as HeadersInit);
 
     if (auth && accessToken.value) {
@@ -34,7 +34,7 @@ export const useApi = () => {
         ...(rest as any),
         baseURL: config.public.apiBase,
         headers: Object.fromEntries(headers.entries()),
-        credentials: rest.credentials ?? (auth ? 'include' : 'same-origin')
+        credentials: 'include',
       }) as Promise<ApiResponse<T> | T>;
 
     try {
