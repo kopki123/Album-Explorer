@@ -22,7 +22,7 @@ export const useApi = () => {
     path: string,
     options: ApiFetchOptions<T> = {},
   ): Promise<ApiResponse<T> | T> => {
-    const { auth = false, retryOn401 = true, ...rest } = options;
+    const { auth = false, retryOn401 = true, credentials = true, ...rest } = options;
     const headers = new Headers((rest.headers || {}) as HeadersInit);
 
     if (auth && accessToken.value) {
