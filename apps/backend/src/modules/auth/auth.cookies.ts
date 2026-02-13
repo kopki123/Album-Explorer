@@ -7,7 +7,7 @@ const REFRESH_COOKIE_NAME = 'refresh_token';
 function cookieOptions(cfg: ConfigService): CookieOptions {
   const secure = cfg.get<string>('COOKIE_SECURE') === 'true';
   const sameSite = (cfg.get<string>('COOKIE_SAMESITE') ?? 'lax') as 'lax' | 'strict' | 'none';
-  const domain = cfg.get<string>('COOKIE_DOMAIN') ?? undefined;
+  const domain = undefined;
 
   return {
     httpOnly: true,
