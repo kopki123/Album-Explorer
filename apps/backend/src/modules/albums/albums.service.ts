@@ -25,7 +25,7 @@ export class AlbumsService {
 
   async list(args: ListArgs) {
     const page = Math.max(1, args.page);
-    const pageSize = Math.min(100, Math.max(1, args.pageSize));
+    const pageSize = Math.min(100, Math.max(10, args.pageSize));
 
     const qb = this.albums.createQueryBuilder('a');
 
@@ -47,7 +47,6 @@ export class AlbumsService {
         qb.orderBy('a.title', 'ASC');
         break;
       default:
-        qb.orderBy('a.releaseDate', 'DESC');
     }
 
     qb.skip((page - 1) * pageSize).take(pageSize);
@@ -56,6 +55,7 @@ export class AlbumsService {
       .leftJoinAndSelect('a.tracks', 't')
       .addOrderBy('t.trackNo', 'ASC');
     const [items, total] = await qb.getManyAndCount();
+
     return {
       data: {
         items: items.map((album) => ({
