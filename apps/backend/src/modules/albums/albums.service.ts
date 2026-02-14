@@ -3,7 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { AlbumEntity } from '../albums/entities/album.entity';
 
-type ListArgs = { q?: string; sort?: string; page: number; pageSize: number };
+type ListArgs = {
+  q?: string;
+  sort?: string;
+  page: number;
+  pageSize: number
+};
 
 function toPublicAlbum(a: AlbumEntity) {
   return {
@@ -27,11 +32,31 @@ export class AlbumsService {
     const page = Math.max(1, args.page);
     const pageSize = Math.min(100, Math.max(10, args.pageSize));
 
-    const qb = this.albums.createQueryBuilder('a');
+    const applySort = (qb: any) => {
+      switch (args.sort) {
+        case 'releaseDate_asc':
+          qb.orderBy('a.releaseDate', 'ASC');
+          break;
+        case 'releaseDate_desc':
+          qb.orderBy('a.releaseDate', 'DESC');
+          break;
+        case 'title_asc':
+          qb.orderBy('a.title', 'ASC');
+          break;
+        case 'title_desc':
+          qb.orderBy('a.title', 'DESC');
+          break;
+        default:
+          qb.orderBy('a.releaseDate', 'ASC');
+      }
+      qb.addOrderBy('a.id', 'ASC');
+    };
+
+    const baseQb = this.albums.createQueryBuilder('a');
 
     if (args.q) {
       const keyword = `%${args.q}%`;
-      qb.andWhere(
+      baseQb.andWhere(
         new Brackets((b) => {
           b.where('a.title ILIKE :keyword', { keyword })
             .orWhere('a.artistName ILIKE :keyword', { keyword });
@@ -39,22 +64,35 @@ export class AlbumsService {
       );
     }
 
-    switch (args.sort) {
-      case 'releaseDate_asc':
-        qb.orderBy('a.releaseDate', 'ASC');
-        break;
-      case 'title_asc':
-        qb.orderBy('a.title', 'ASC');
-        break;
-      default:
+    applySort(baseQb);
+
+    const total = await baseQb.clone().getCount();
+
+    const idRows = await baseQb
+      .clone()
+      .select('a.id', 'id')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getRawMany<{ id: number }>();
+
+    const ids = idRows.map((r) => r.id);
+    if (ids.length === 0) {
+      return {
+        data: { items: [] },
+        meta: { pagination: { page, pageSize, total } },
+      };
     }
 
-    qb.skip((page - 1) * pageSize).take(pageSize);
-
-    qb.leftJoinAndSelect('a.genres', 'g')
+    const qb = this.albums
+      .createQueryBuilder('a')
+      .leftJoinAndSelect('a.genres', 'g')
       .leftJoinAndSelect('a.tracks', 't')
-      .addOrderBy('t.trackNo', 'ASC');
-    const [items, total] = await qb.getManyAndCount();
+      .where('a.id IN (:...ids)', { ids });
+
+    applySort(qb);
+    qb.addOrderBy('t.trackNo', 'ASC');
+
+    const items = await qb.getMany();
 
     return {
       data: {
@@ -70,11 +108,7 @@ export class AlbumsService {
         })),
       },
       meta: {
-        pagination: {
-          page,
-          pageSize,
-          total,
-        },
+        pagination: { page, pageSize, total },
       },
     };
   }
