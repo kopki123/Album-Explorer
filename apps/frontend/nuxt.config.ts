@@ -95,7 +95,11 @@ export default defineNuxtConfig({
       title: 'Album Explorer',
       meta: [
         { name: 'description', content: 'Explore and collect your favorite albums.' }
-      ]
-    }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    },
+
   },
 });
