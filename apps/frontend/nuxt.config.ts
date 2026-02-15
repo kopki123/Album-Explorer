@@ -38,9 +38,24 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/hints',
     '@nuxt/image',
+    '@nuxtjs/seo',
     '@primevue/nuxt-module',
     '@nuxtjs/tailwindcss'
   ],
+
+  site: {
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:4200',
+    name: 'Album Explorer'
+  },
+
+  sitemap: {
+    enabled: true
+  },
+
+  robots: {
+    enabled: true,
+    disallow: ['/api']
+  },
 
   primevue: {
     autoImport: true,
