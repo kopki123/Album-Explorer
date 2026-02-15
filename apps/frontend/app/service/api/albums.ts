@@ -1,5 +1,5 @@
-import type { Album, PaginatedData, PaginatedResponse, PaginationMeta } from '../../types/api';
-import { useApi } from '../../composables/useApi';
+import type { Album, PaginatedData, PaginatedResponse, PaginationMeta } from '~/types/api';
+import { useApi } from '~/composables/useApi';
 
 export interface AlbumsQuery {
   q?: string;

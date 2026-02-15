@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { FavoriteItem, PaginatedResponse } from '../types/api';
-import { fetchFavorites } from '../service/api';
-import { formatDate } from '../utils/format';
+import type { FavoriteItem, PaginatedResponse } from '~/types/api';
+import { fetchFavorites } from '~/service/api';
+import { formatDate } from '~/utils/format';
 
 interface PageEvent {
   page: number;

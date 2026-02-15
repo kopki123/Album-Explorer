@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Album } from '../../types/api';
+import type { Album } from '~/types/api';
 import {
   addFavorite,
   fetchAlbumBySlug,
@@ -7,7 +7,7 @@ import {
   fetchRatingById,
   removeFavorite,
   saveRating,
-} from '../../service/api';
+} from '~/service/api';
 
 definePageMeta({
   title: 'Album detail'

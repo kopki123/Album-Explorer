@@ -1,5 +1,5 @@
-import type { ApiResponse, AuthResponse } from '../../types/api';
-import { unwrapApiResponse } from '../../utils/api-response';
+import type { ApiResponse, AuthResponse } from '~/types/api';
+import { unwrapApiResponse } from '~/utils/api-response';
 
 export const refreshAuth = async () => {
   const config = useRuntimeConfig();

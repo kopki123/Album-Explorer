@@ -1,5 +1,5 @@
-import type { User } from '../types/api';
-import { getGoogleAuthUrl, logoutAuth, refreshAuth } from '../service/api';
+import type { User } from '~/types/api';
+import { getGoogleAuthUrl, logoutAuth, refreshAuth } from '~/service/api';
 
 export const useAuth = () => {
   const user = useState<User | null>('auth-user', () => null);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Track } from '../types/api';
-import { formatDurationMs } from '../utils/format';
+import type { Track } from '~/types/api';
+import { formatDurationMs } from '~/utils/format';
 
 const props = withDefaults(defineProps<{
   tracks: Track[];

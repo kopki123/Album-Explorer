@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { PaginatedResponse, RatingItem } from '../types/api';
-import { fetchRatings } from '../service/api';
-import { formatDate } from '../utils/format';
+import type { PaginatedResponse, RatingItem } from '~/types/api';
+import { fetchRatings } from '~/service/api';
+import { formatDate } from '~/utils/format';
 
 interface PageEvent {
   page: number;

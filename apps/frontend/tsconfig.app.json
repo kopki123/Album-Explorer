@@ -1,14 +1,17 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "app",
-    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/*"],
+      "@/*": ["./app/*"]
+    },
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "lib": [
       "ESNext",
       "dom",
@@ -17,13 +20,21 @@
     ]
   },
   "include": [
-    ".nuxt/nuxt.d.ts",
-    "app/**/*",
-    "server/**/*"
+    "app/**/*.ts",
+    "app/**/*.vue",
+    "app/**/*.d.ts",
+
+    "types/**/*.ts",
+    "types/**/*.d.ts",
+
+    "env.d.ts",
+    "nuxt.config.ts",
+    ".nuxt/**/*.ts"
   ],
   "exclude": [
-    "out-tsc",
     "dist",
+    ".output",
+    "out-tsc",
     "vite.config.ts",
     "vite.config.mts",
     "vitest.config.ts",

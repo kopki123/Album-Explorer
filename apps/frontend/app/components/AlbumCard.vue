@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Album } from '../types/api';
-import { formatDurationMs } from '../utils/format';
+import type { Album } from '~/types/api';
+import { formatDurationMs } from '~/utils/format';
 
 const props = defineProps<{
   album: Album;

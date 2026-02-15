@@ -1,4 +1,4 @@
-import type { ApiResponse } from '../types/api';
+import type { ApiResponse } from '~/types/api';
 
 export const isApiResponse = (value: unknown): value is ApiResponse<unknown, unknown> => {
   if (!value || typeof value !== 'object') {

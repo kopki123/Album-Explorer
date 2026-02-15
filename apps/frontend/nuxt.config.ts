@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   },
   css: [
     '~/assets/css/main.css',
-    'primeicons/primeicons.css'
+    'primeicons/primeicons.css',
   ],
   vite: {
     plugins: [nxViteTsPaths() as any],
@@ -54,8 +54,14 @@ export default defineNuxtConfig({
   },
 
   robots: {
-    enabled: true,
-    disallow: ['/api']
+    blockNonSeoBots: true,
+    blockAiBots: true,
+    groups: [
+      {
+        userAgent: '*',
+        allow: '/',
+      }
+    ],
   },
 
   primevue: {

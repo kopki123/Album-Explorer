@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Album, PaginatedResponse } from '../../types/api';
-import { fetchAlbums, fetchRandomAlbum } from '../../service/api';
+import type { Album, PaginatedResponse } from '~/types/api';
+import { fetchAlbums, fetchRandomAlbum } from '~/service/api';
 
 definePageMeta({
   title: 'Explore albums'

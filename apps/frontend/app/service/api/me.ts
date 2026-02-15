@@ -7,8 +7,8 @@ import type {
   RatingById,
   RatingItem,
   User
-} from '../../types/api';
-import { useApi } from '../../composables/useApi';
+} from '~/types/api';
+import { useApi } from '~/composables/useApi';
 
 export interface MeListQuery {
   page: number;

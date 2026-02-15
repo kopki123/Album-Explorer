@@ -1,7 +1,7 @@
 import type { FetchOptions } from 'ofetch';
 import { FetchError } from 'ofetch';
-import type { ApiResponse } from '../types/api';
-import { unwrapApiResponse, unwrapApiResponseWithMeta } from '../utils/api-response';
+import type { ApiResponse } from '~/types/api';
+import { unwrapApiResponse, unwrapApiResponseWithMeta } from '~/utils/api-response';
 
 interface ApiFetchOptions<T> extends Omit<FetchOptions<any>, 'baseURL'> {
   /**
