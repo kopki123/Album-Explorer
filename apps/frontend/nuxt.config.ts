@@ -40,7 +40,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/seo',
     '@primevue/nuxt-module',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    'nuxt-gtag',
   ],
 
   site: {
@@ -66,6 +67,21 @@ export default defineNuxtConfig({
         preset: Aura
       }
     }
+  },
+
+  gtag: {
+    enabled: process.env.NODE_ENV === 'production',
+    id: process.env.NUXT_PUBLIC_GTAG_ID,
+    initCommands: [
+      // Setup up consent mode
+      ['consent', 'default', {
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      }],
+    ],
   },
 
   app: {

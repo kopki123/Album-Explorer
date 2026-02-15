@@ -3,7 +3,6 @@ import { fetchMe } from './service/api';
 import OgImage from '~/assets/images/og-image.png';
 
 useSeoMeta({
-  title: 'Album Explorer',
   ogTitle: 'Album Explorer',
   description: 'Explore and collect your favorite albums.',
   ogDescription: 'Explore and collect your favorite albums.',

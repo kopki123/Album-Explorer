@@ -85,6 +85,7 @@
     "i": "^0.3.7",
     "lodash-es": "^4.17.23",
     "npm": "^11.10.0",
+    "nuxt-gtag": "^4.1.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",

@@ -60,6 +60,8 @@ Frontend (`apps/frontend/.env`):
 | Key | Example | Notes |
 | --- | --- | --- |
 | `NUXT_PUBLIC_API_BASE` | `http://localhost:3001/api/v1` | API base URL |
+| `NUXT_PUBLIC_GTAG_ID` | `G-123456789` | google tag |
+
 
 **API Docs**
 - Swagger UI: `http://localhost:3001/api/v1/docs` (enabled by default in non-production)
