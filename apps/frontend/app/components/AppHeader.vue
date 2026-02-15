@@ -25,6 +25,7 @@ function toggleAccountMenu(event: Event) {
         <Avatar
           :image="user?.avatarUrl || ''"
           shape="circle"
+          aria-label="avatar"
           aria-haspopup="true"
           aria-controls="account_menu"
           @click="toggleAccountMenu"
