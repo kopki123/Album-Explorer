@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { fetchMe } from './service/api';
-import OgImage from './assets/images/og-image.png';
+import OgImage from '~/assets/images/og-image.png';
 
 useSeoMeta({
   title: 'Album Explorer',
