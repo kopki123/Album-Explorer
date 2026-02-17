@@ -18,8 +18,22 @@ const searchTerm = ref((route.query.q as string) || '');
 const sort = ref((route.query.sort as string) || '');
 const page = ref(Number(route.query.page) || 1);
 const pageSize = ref(Number(route.query.pageSize) || 10);
-
 const randomLoading = ref(false);
+const albumItems = ref<Album[]>([]);
+const totalAlbums = ref(0);
+const columns = ref(1);
+
+const hasMoreAlbums = computed(() => albumItems.value.length < totalAlbums.value);
+const albumRows = computed(() => {
+  const rows: Album[][] = [];
+
+  for (let i = 0; i < albumItems.value.length; i += columns.value) {
+    rows.push(albumItems.value.slice(i, i + columns.value));
+  }
+
+  return rows;
+});
+
 
 watch([searchTerm, sort, pageSize], () => page.value = 1, { immediate: true });
 
@@ -32,10 +46,6 @@ watch([searchTerm, sort, page], () => {
     }
   });
 });
-
-const albumItems = ref<Album[]>([]);
-const totalAlbums = ref(0);
-const columns = ref(1);
 
 const { data: albums, pending } = useAsyncData<PaginatedResponse<Album>>('albums-explore', () =>
   fetchAlbums({
@@ -63,17 +73,6 @@ watch(albums, (value) => {
 
   albumItems.value = [...albumItems.value, ...value.items];
 }, { immediate: true });
-
-const hasMoreAlbums = computed(() => albumItems.value.length < totalAlbums.value);
-const albumRows = computed(() => {
-  const rows: Album[][] = [];
-
-  for (let i = 0; i < albumItems.value.length; i += columns.value) {
-    rows.push(albumItems.value.slice(i, i + columns.value));
-  }
-
-  return rows;
-});
 
 function updateColumns() {
   if (window.innerWidth >= 1280) {

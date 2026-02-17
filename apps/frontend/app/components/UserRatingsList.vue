@@ -127,10 +127,6 @@ function goToAlbum(slug: string) {
                   <p class="text-sm text-slate-500">{{ item.album.artistName }}</p>
                   <h3 class="text-lg font-semibold">{{ item.album.title }}</h3>
                 </div>
-                <Tag
-                  :value="`${item.score}/5`"
-                  rounded
-                />
               </div>
 
               <div class="flex items-center gap-3">

@@ -107,16 +107,16 @@ function goToAlbum(slug: string) {
               </div>
             </div>
 
-            <div class="flex flex-1 flex-col gap-2">
+            <div class="flex-1 flex flex-col gap-2">
               <div>
                 <p class="text-sm text-slate-500">{{ item.album.artistName }}</p>
                 <h3 class="text-lg font-semibold">{{ item.album.title }}</h3>
               </div>
-            </div>
 
-            <p class="self-end text-xs text-slate-500">
-              {{ formatDate(item.createdAt) }}
-            </p>
+              <p class="self-end text-xs text-slate-500">
+                {{ formatDate(item.createdAt) }}
+              </p>
+            </div>
           </div>
         </template>
       </Card>

@@ -28,6 +28,7 @@ function toggleAccountMenu(event: Event) {
           aria-label="avatar"
           aria-haspopup="true"
           aria-controls="account_menu"
+          class="cursor-pointer"
           @click="toggleAccountMenu"
         />
         <Menu
