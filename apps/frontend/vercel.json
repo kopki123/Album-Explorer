@@ -2,6 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nuxtjs",
   "installCommand": "cd ../.. && npm install",
-  "buildCommand": "cd ../.. && npx nx run build:frontend --prod",
-  "devCommand": "cd ../.. && npx nx run serve:frontend"
+  "buildCommand": "cd ../.. && npx nx run frontend:build --prod",
+  "devCommand": "cd ../.. && npx nx run frontend:serve"
 }
