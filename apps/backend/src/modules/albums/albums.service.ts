@@ -47,7 +47,7 @@ export class AlbumsService {
           qb.orderBy('a.title', 'DESC');
           break;
         default:
-          qb.orderBy('a.releaseDate', 'ASC');
+          qb.orderBy('a.releaseDate', 'DESC');
       }
       qb.addOrderBy('a.id', 'ASC');
     };
