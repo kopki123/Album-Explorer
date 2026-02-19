@@ -175,7 +175,7 @@ onBeforeUnmount(() => {
         </template>
       </VirtualScroller>
 
-      <p v-if="!pending" class="py-12 text-center text-slate-500">
+      <p v-if="albumItems.length === 0" class="py-12 text-center text-slate-500">
         No albums found for this search. Try another keyword.
       </p>
     </div>
