@@ -43,10 +43,12 @@ import { MeModule } from '../modules/me/me.module';
         const sslEnabled = parseBoolean(cfg.get<string>('DB_SSL')) ?? isProd;
         const sslRejectUnauthorized = parseBoolean(cfg.get<string>('DB_SSL_REJECT_UNAUTHORIZED')) ?? isProd;
 
+        const pem = cfg.get<string>('DB_CA_PEM') ?? '';
+
         return {
           type: 'postgres',
           url,
-          ssl: sslEnabled ? { rejectUnauthorized: sslRejectUnauthorized } : false,
+          ssl: sslEnabled ? { rejectUnauthorized: sslRejectUnauthorized, ca: pem } : false,
           autoLoadEntities: true,
           synchronize: !isProd,
           logging: !isProd,
