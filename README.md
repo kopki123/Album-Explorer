@@ -1,81 +1,136 @@
 # Album Explorer (Nx Monorepo)
 
-Album Explorer is a full-stack Nx workspace with a Nuxt 4 frontend and a NestJS backend. The backend exposes a versioned REST API and Swagger docs, and the frontend consumes it via a configurable API base URL.
+Album Explorer is a full-stack Nx workspace with:
+- Nuxt 4 frontend (`apps/frontend`)
+- NestJS 11 backend (`apps/backend`)
+- Playwright frontend e2e (`apps/frontend-e2e`)
+- Jest backend e2e (`apps/backend-e2e`)
 
-**Tech Stack**
-- Nx 22
+The backend exposes versioned REST endpoints under `/api/v1`, and Swagger docs in non-production by default.
+
+## Tech Stack
+- Nx `22.5.x`
 - Nuxt 4 + Vue 3
 - NestJS 11
-- TypeORM + PostgreSQL
-- PrimeVue + Tailwind
-- Playwright (frontend e2e)
-- Jest (backend e2e)
+- TypeORM + PostgreSQL (local Postgres or Supabase Postgres)
+- PrimeVue + Tailwind CSS
+- Playwright + Jest (e2e)
 
-**Apps**
-- `apps/frontend`: Nuxt 4 web app (dev server on `http://localhost:4200`)
-- `apps/backend`: NestJS API (dev server on `http://localhost:3001`, base path `/api/v1`)
-- `apps/frontend-e2e`: Playwright tests
-- `apps/backend-e2e`: Jest e2e tests
+## Prerequisites
+- Node.js 20+
+- npm 10+
+- PostgreSQL 13+ (or Supabase project with Postgres connection string)
 
-**Requirements**
-- Node.js 20+ (matches `@types/node` in the workspace)
-- PostgreSQL 13+
+## Local Development
+1. Install dependencies:
+```bash
+npm install
+```
 
-**Quick Start (Local Dev)**
-1. Install dependencies: `npm install`
-2. Create required environment files:
-   - `apps/backend/.env`
-   - `apps/frontend/.env`
-3. Start backend: `npx nx serve backend`
-4. Start frontend: `npx nx serve frontend`
+2. Create env files:
+- `apps/backend/.env`
+- `apps/frontend/.env`
 
-**Environment Variables**
-Backend (`apps/backend/.env`):
+3. Start backend:
+```bash
+npx nx serve backend
+```
 
-| Key | Example | Notes |
-| --- | --- | --- |
-| `NODE_ENV` | `development` | Controls dev/prod behavior |
-| `PORT` | `3001` | API port |
-| `FRONTEND_ORIGIN` | `http://localhost:4200` | CORS allowed origin(s) |
-| `GOOGLE_CLIENT_ID` | `...` | Google OAuth |
-| `GOOGLE_CLIENT_SECRET` | `...` | Google OAuth |
-| `GOOGLE_CALLBACK_URL` | `http://localhost:3001/api/v1/auth/google/callback` | Google OAuth callback |
-| `WEB_LOGIN_SUCCESS_REDIRECT_URL` | `http://localhost:4200/auth/callback` | OAuth redirect |
-| `JWT_ACCESS_SECRET` | `...` | JWT access secret |
-| `JWT_ACCESS_EXPIRES_IN` | `15m` | Access token TTL |
-| `JWT_REFRESH_SECRET` | `...` | Refresh token secret |
-| `REFRESH_TOKEN_EXPIRES_DAYS` | `30` | Refresh token TTL |
-| `COOKIE_DOMAIN` | `localhost` | Cookie domain |
-| `COOKIE_SECURE` | `false` | Set `true` in HTTPS |
-| `COOKIE_SAMESITE` | `lax` | Cookie SameSite |
-| `DB_HOST` | `localhost` | DB host |
-| `DB_PORT` | `5432` | DB port |
-| `DB_USERNAME` | `postgres` | DB user |
-| `DB_PASSWORD` | `postgres` | DB password |
-| `DB_NAME` | `albums-explorer-dev` | DB name |
-| `DATABASE_URL` | `postgresql://...` | Optional connection URL |
+4. Seed albums data (optional but recommended for local dev):
+```bash
+npx tsx apps/backend/src/scripts/seed-albums.ts
+```
 
-Frontend (`apps/frontend/.env`):
+5. Start frontend:
+```bash
+npx nx serve frontend
+```
 
-| Key | Example | Notes |
-| --- | --- | --- |
-| `NUXT_PUBLIC_API_BASE` | `http://localhost:3001/api/v1` | API base URL |
-| `NUXT_PUBLIC_GTAG_ID` | `G-123456789` | google tag |
+6. Open:
+- Frontend: `http://localhost:4200`
+- Backend API: `http://localhost:3001/api/v1`
+- Swagger: `http://localhost:3001/api/v1/docs`
 
+## Environment Variables
 
-**API Docs**
-- Swagger UI: `http://localhost:3001/api/v1/docs` (enabled by default in non-production)
+### Backend (`apps/backend/.env`)
 
-**Common Nx Commands**
-- Serve frontend: `npx nx serve frontend`
-- Serve backend: `npx nx serve backend`
-- Build frontend: `npx nx build frontend`
-- Build backend: `npx nx build backend`
-- Frontend e2e: `npx nx e2e frontend-e2e`
-- Backend e2e: `npx nx e2e backend-e2e`
+`DATABASE_URL` is required by current backend startup.
 
-**Project Structure**
-- `apps/frontend/app`: Nuxt app source (`pages`, `components`, `composables`, etc.)
-- `apps/backend/src`: NestJS app source (`modules`, `common`, `health`, etc.)
-- `apps/*-e2e`: End-to-end test projects
-- `packages/`: Shared libraries (currently empty)
+```dotenv
+NODE_ENV=development
+PORT=3001
+FRONTEND_ORIGIN=http://localhost:4200
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/albums-explorer-dev
+DB_POOL_MAX=5
+DB_SSL=false
+DB_SSL_REJECT_UNAUTHORIZED=false
+
+JWT_ACCESS_SECRET=replace-me
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_SECRET=replace-me
+
+GOOGLE_CLIENT_ID=replace-me
+GOOGLE_CLIENT_SECRET=replace-me
+GOOGLE_CALLBACK_URL=http://localhost:3001/api/v1/auth/google/callback
+WEB_LOGIN_SUCCESS_REDIRECT_URL=http://localhost:4200/auth/callback
+
+COOKIE_SECURE=false
+COOKIE_SAMESITE=lax
+COOKIE_DOMAIN=localhost
+CSRF_ALLOW_NO_ORIGIN=true
+SWAGGER_ENABLED=true
+```
+
+Notes:
+- In production, set `NODE_ENV=production` and use strong JWT secrets.
+- In production, keep `DB_SSL=true` and `DB_SSL_REJECT_UNAUTHORIZED=true` unless your provider explicitly requires otherwise.
+- `fake-login` endpoint is disabled in production.
+- Backend CORS/CSRF checks are based on `FRONTEND_ORIGIN`.
+
+### Frontend (`apps/frontend/.env`)
+
+```dotenv
+NUXT_PUBLIC_API_BASE=http://localhost:3001/api/v1
+NUXT_PUBLIC_SITE_URL=http://localhost:4200
+NUXT_PUBLIC_GTAG_ID=
+```
+
+Notes:
+- `NUXT_PUBLIC_API_BASE` should include `/api/v1`.
+- Google Analytics (`nuxt-gtag`) only runs when `NODE_ENV=production`.
+
+## Data Seed
+- Seed script: `apps/backend/src/scripts/seed-albums.ts`
+- Default source file: `data/albums.json`
+- The script is idempotent for albums/genres relationships and tracks replacement.
+
+If you want to seed from another file, adjust `jsonPath` in `apps/backend/src/scripts/seed-albums.ts`.
+
+## Nx Commands
+```bash
+# Serve
+npx nx serve backend
+npx nx serve frontend
+
+# Build
+npx nx build backend
+npx nx build frontend
+
+# E2E
+npx nx e2e backend-e2e
+npx nx e2e frontend-e2e
+```
+
+## E2E Coverage (Current)
+- Backend e2e validates `GET /api/v1/albums` API envelope and pagination fields.
+- Frontend e2e validates:
+  - `/` redirects to `/albums`
+  - Albums page heading is visible
+  - Search input is visible
+
+## Project Structure
+- `apps/frontend/app`: Nuxt app source (`pages`, `components`, `composables`, `service`)
+- `apps/backend/src`: NestJS source (`modules`, `common`, `health`, scripts)
+- `apps/*-e2e`: end-to-end test projects
+- `data/`: album dataset JSON files
