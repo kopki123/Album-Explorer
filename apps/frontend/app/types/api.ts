@@ -12,6 +12,8 @@ export interface Album {
   tracks: Track[];
 }
 
+export type AlbumPublic = Omit<Album, 'genres' | 'tracks'>;
+
 export interface AlbumSummary {
   id: number;
   slug: string;
@@ -56,7 +58,7 @@ export interface PaginatedResponse<T> {
 }
 
 export interface FavoriteItem {
-  album: Album;
+  album: AlbumPublic;
   createdAt: string;
 }
 
@@ -68,7 +70,7 @@ export interface FavoriteById {
 }
 
 export interface RatingItem {
-  album: Album;
+  album: AlbumPublic;
   score: number;
   review?: string | null;
   createdAt: string;
