@@ -48,7 +48,7 @@ import { MeModule } from '../modules/me/me.module';
         return {
           type: 'postgres',
           url,
-          ssl: sslEnabled ? { rejectUnauthorized: sslRejectUnauthorized, ca: pem } : false,
+          ssl: sslEnabled ? { rejectUnauthorized: sslRejectUnauthorized, ca: pem } : { rejectUnauthorized: false },
           autoLoadEntities: true,
           synchronize: !isProd,
           logging: !isProd,
