@@ -30,41 +30,30 @@ import { MeModule } from '../modules/me/me.module';
       ],
     }),
 
-    // TypeOrmModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: (cfg: ConfigService) => ({
-    //     type: 'postgres',
-    //     host: cfg.get<string>('DB_HOST'),
-    //     port: Number(cfg.get<string>('DB_PORT')),
-    //     username: cfg.get<string>('DB_USERNAME'),
-    //     password: cfg.get<string>('DB_PASSWORD'),
-    //     database: cfg.get<string>('DB_NAME'),
-    //     autoLoadEntities: true,
-    //     synchronize: cfg.get<string>('NODE_ENV') !== 'production', // prod 改用 migrations
-    //     logging: cfg.get<string>('NODE_ENV') === 'development',
-    //   }),
-    // }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (cfg: ConfigService) => {
+        const isProd = cfg.get('NODE_ENV') === 'production';
+        const url = cfg.get<string>('DATABASE_URL');
 
-  TypeOrmModule.forRootAsync({
-    inject: [ConfigService],
-    useFactory: (cfg: ConfigService) => {
-      const isProd = cfg.get('NODE_ENV') === 'production';
-      const url = cfg.get<string>('DATABASE_URL');
-      if (!url) throw new Error('Missing DATABASE_URL');
+        if (!url) throw new Error('Missing DATABASE_URL');
 
-      return {
-        type: 'postgres',
-        url,
-        // ✅ demo：先關掉憑證鏈驗證
-        ssl: { rejectUnauthorized: false },
+        const parseBoolean = (value: string | undefined) => value === undefined ? undefined : value === 'true';
 
-        autoLoadEntities: true,
-        synchronize: !isProd,
-        logging: !isProd,
-        extra: { max: Number(cfg.get('DB_POOL_MAX') ?? 5) },
-      };
-    },
-  }),
+        const sslEnabled = parseBoolean(cfg.get<string>('DB_SSL')) ?? isProd;
+        const sslRejectUnauthorized = parseBoolean(cfg.get<string>('DB_SSL_REJECT_UNAUTHORIZED')) ?? isProd;
+
+        return {
+          type: 'postgres',
+          url,
+          ssl: sslEnabled ? { rejectUnauthorized: sslRejectUnauthorized } : false,
+          autoLoadEntities: true,
+          synchronize: !isProd,
+          logging: !isProd,
+          extra: { max: Number(cfg.get('DB_POOL_MAX') ?? 5) },
+        };
+      },
+    }),
 
     HealthModule,
 
