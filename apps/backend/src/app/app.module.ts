@@ -43,7 +43,7 @@ import { MeModule } from '../modules/me/me.module';
         const sslEnabled = parseBoolean(cfg.get<string>('DB_SSL')) ?? isProd;
         const sslRejectUnauthorized = parseBoolean(cfg.get<string>('DB_SSL_REJECT_UNAUTHORIZED')) ?? isProd;
 
-        const pem = cfg.get<string>('DB_CA_PEM') ?? '';
+        const pem = cfg.get<string>('DB_CA_PEM')?.replace(/\\n/g, '\n').trim() ?? '';
 
         return {
           type: 'postgres',
