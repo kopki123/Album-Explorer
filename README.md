@@ -1,10 +1,11 @@
 # Album Explorer (Nx Monorepo)
 
+[繁體中文 README](README.zh-TW.md)
+
 Album Explorer is a full-stack Nx workspace with:
 - Nuxt 4 frontend (`apps/frontend`)
 - NestJS 11 backend (`apps/backend`)
 - Playwright frontend e2e (`apps/frontend-e2e`)
-- Jest backend e2e (`apps/backend-e2e`)
 
 The backend exposes versioned REST endpoints under `/api/v1`, and Swagger docs in non-production by default.
 
@@ -14,10 +15,9 @@ The backend exposes versioned REST endpoints under `/api/v1`, and Swagger docs i
 - NestJS 11
 - TypeORM + PostgreSQL (local Postgres or Supabase Postgres)
 - PrimeVue + Tailwind CSS
-- Playwright + Jest (e2e)
 
 ## Prerequisites
-- Node.js 20+
+- Node.js 22+
 - npm 10+
 - PostgreSQL 13+ (or Supabase project with Postgres connection string)
 
@@ -33,12 +33,12 @@ npm install
 
 3. Start backend:
 ```bash
-npx nx serve backend
+npx nx serve backend --configuration=production
 ```
 
 4. Seed albums data (optional but recommended for local dev):
 ```bash
-npx tsx apps/backend/src/scripts/seed-albums.ts
+DATABASE_URL="DB connection string" npx tsx apps/backend/src/scripts/seed-albums.ts
 ```
 
 5. Start frontend:
@@ -83,8 +83,6 @@ SWAGGER_ENABLED=true
 ```
 
 Notes:
-- In production, set `NODE_ENV=production` and use strong JWT secrets.
-- In production, keep `DB_SSL=true` and `DB_SSL_REJECT_UNAUTHORIZED=true` unless your provider explicitly requires otherwise.
 - `fake-login` endpoint is disabled in production.
 - Backend CORS/CSRF checks are based on `FRONTEND_ORIGIN`.
 
@@ -103,9 +101,6 @@ Notes:
 ## Data Seed
 - Seed script: `apps/backend/src/scripts/seed-albums.ts`
 - Default source file: `data/albums.json`
-- The script is idempotent for albums/genres relationships and tracks replacement.
-
-If you want to seed from another file, adjust `jsonPath` in `apps/backend/src/scripts/seed-albums.ts`.
 
 ## Nx Commands
 ```bash
@@ -116,21 +111,9 @@ npx nx serve frontend
 # Build
 npx nx build backend
 npx nx build frontend
-
-# E2E
-npx nx e2e backend-e2e
-npx nx e2e frontend-e2e
 ```
-
-## E2E Coverage (Current)
-- Backend e2e validates `GET /api/v1/albums` API envelope and pagination fields.
-- Frontend e2e validates:
-  - `/` redirects to `/albums`
-  - Albums page heading is visible
-  - Search input is visible
 
 ## Project Structure
 - `apps/frontend/app`: Nuxt app source (`pages`, `components`, `composables`, `service`)
 - `apps/backend/src`: NestJS source (`modules`, `common`, `health`, scripts)
-- `apps/*-e2e`: end-to-end test projects
 - `data/`: album dataset JSON files
