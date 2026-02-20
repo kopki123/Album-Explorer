@@ -6,7 +6,7 @@ import type { Request, Response } from 'express';
 
 @Injectable()
 export class GoogleAuthGuard extends AuthGuard('google') {
-  async canActivate(context: ExecutionContext) {
+  override async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest<Request>() as any;
     const res = context.switchToHttp().getResponse<Response>();
 
@@ -28,7 +28,7 @@ export class GoogleAuthGuard extends AuthGuard('google') {
     return (await super.canActivate(context)) as boolean;
   }
 
-  getAuthenticateOptions(context: ExecutionContext) {
+  override getAuthenticateOptions(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest<Request>() as any;
     return {
       scope: ['profile', 'email'],

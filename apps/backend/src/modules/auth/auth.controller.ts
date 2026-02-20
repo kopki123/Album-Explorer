@@ -1,13 +1,13 @@
-import { Body, Controller, ForbiddenException, Get, Post, Query, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Request, Response } from 'express';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from '../../common/guards/google-auth.guard';
 import { CsrfGuard } from '../../common/guards/csrf.guard';
 import type { GoogleProfileUser } from './strategies/google.strategy';
-import { ZodValidationPipe } from '../../common/pipes/zod-vaildation.pipe';
 import {
   clearRefreshCookie,
   getRefreshCookie,

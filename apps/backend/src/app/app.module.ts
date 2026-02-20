@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 import { HealthModule } from '../health/health.module';
 import { AlbumsModule } from '../modules/albums/albums.module';
@@ -67,6 +68,10 @@ import { MeModule } from '../modules/me/me.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
     },
   ],
 })

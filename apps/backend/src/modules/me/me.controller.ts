@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { ZodValidationPipe } from '../../common/pipes/zod-vaildation.pipe';
 import { MeService } from './me.service';
 import { CurrentUserId } from '../../common/decorators/current-user-id.decorator';
 import { ApiMetaDto } from '../../common/dto/api-meta.dto';
