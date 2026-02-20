@@ -21,6 +21,17 @@ const sections = [
     ]
   }
 ];
+
+const inspiredByLinks = [
+  {
+    label: '1001 Albums Generator',
+    href: 'https://1001albumsgenerator.com/'
+  },
+  {
+    label: 'Wikipedia: 1001 Albums You Must Hear Before You Die',
+    href: 'https://en.wikipedia.org/wiki/1001_Albums_You_Must_Hear_Before_You_Die'
+  }
+];
 </script>
 
 <template>
@@ -44,5 +55,25 @@ const sections = [
         </template>
       </Card>
     </div>
+
+    <Card>
+      <template #title>
+        <p class="text-sm uppercase tracking-wide text-primary">Inspired by</p>
+      </template>
+      <template #content>
+        <ul class="mt-2 list-inside list-disc space-y-1">
+          <li v-for="link in inspiredByLinks" :key="link.href">
+            <a
+              :href="link.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary hover:underline"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </template>
+    </Card>
   </section>
 </template>
