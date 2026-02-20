@@ -8,6 +8,7 @@ export interface Album {
   durationMs: number | null;
   coverUrl: string | null;
   wikiUrl: string | null;
+  spotifyId: string | null;
   genres: Genre[];
   tracks: Track[];
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import googleIconUrl from '~/assets/icon/google.svg';
+import googleIconUrl from '~/assets/icons/google.svg';
 
 const { startGoogleLogin } = useAuth();
 </script>

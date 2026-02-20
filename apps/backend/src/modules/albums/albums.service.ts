@@ -21,6 +21,7 @@ function toPublicAlbum(a: AlbumEntity) {
     durationMs: a.durationMs,
     coverUrl: a.coverUrl,
     wikiUrl: a.wikiUrl,
+    spotifyId: a.spotifyId,
   };
 }
 
@@ -133,15 +134,7 @@ export class AlbumsService {
     if (!album) throw new NotFoundException('Album not found');
 
     return {
-      id: album.id,
-      slug: album.slug,
-      title: album.title,
-      artistName: album.artistName,
-      releaseDate: album.releaseDate,
-      description: album.description,
-      durationMs: album.durationMs,
-      coverUrl: album.coverUrl,
-      wikiUrl: album.wikiUrl,
+      ...toPublicAlbum(album),
       genres: album.genres?.map((x) => ({ id: x.id, name: x.name, slug: x.slug })) ?? [],
       tracks: album.tracks?.map((x) => ({
         id: x.id,

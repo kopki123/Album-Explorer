@@ -7,6 +7,7 @@
     "durationMs": 2823000,
     "coverUrl": "https://i.scdn.co/image/ab67616d0000b273dc30583ba717007b00cceb25",
     "wikiUrl": "https://en.wikipedia.org/wiki/Abbey Road",
+    "spotifyId": "0ETFjACtuP2ADo6LFhL6HN",
     "genres": [
       "Rock",
       "Psychedelic rock",
@@ -98,6 +99,6 @@
         "title": "Her Majesty",
         "durationMs": 23000
       }
-    ]
+    ],
   }
 ]

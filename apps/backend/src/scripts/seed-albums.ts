@@ -11,6 +11,7 @@ type AlbumJson = {
   durationMs: number | null;
   coverUrl: string | null;
   wikiUrl: string | null;
+  spotifyId?: string | null;
   genres: string[];
   tracks: { trackNo: number; title: string; durationMs: number | null }[];
 };
@@ -108,7 +109,8 @@ async function main() {
                description = $5,
                "durationMs" = $6,
                "coverUrl" = $7,
-               "wikiUrl" = $8
+               "wikiUrl" = $8,
+               "spotifyId" = $9
            where slug = $1`,
           [
             albumSlug,
@@ -119,6 +121,7 @@ async function main() {
             a.durationMs,
             a.coverUrl,
             a.wikiUrl,
+            a.spotifyId ?? null,
           ],
         );
 
@@ -128,9 +131,9 @@ async function main() {
       } else {
         const insertedAlbum = await client.query(
           `insert into public.albums
-            (slug, title, "artistName", "releaseDate", description, "durationMs", "coverUrl", "wikiUrl")
+            (slug, title, "artistName", "releaseDate", description, "durationMs", "coverUrl", "wikiUrl", "spotifyId")
            values
-            ($1,   $2,    $3,          $4,          $5,          $6,           $7,        $8)
+            ($1,   $2,    $3,          $4,          $5,          $6,           $7,        $8,       $9)
            returning id`,
           [
             albumSlug,
@@ -141,6 +144,7 @@ async function main() {
             a.durationMs,
             a.coverUrl,
             a.wikiUrl,
+            a.spotifyId ?? null,
           ],
         );
         albumId = insertedAlbum.rows[0].id as number;

@@ -8,6 +8,7 @@ import {
   removeFavorite,
   saveRating,
 } from '~/service/api';
+import spotifyLogo from '~/assets/icons/spotify-logo.svg';
 
 definePageMeta({
   title: 'Album detail'
@@ -157,6 +158,23 @@ async function saveAlbumRating() {
               :value="genre.name"
               rounded
             />
+          </div>
+
+          <div class="flex gap-2">
+            <Button
+              v-if="album.spotifyId"
+              size="small"
+              text
+              as="a"
+              :href="`https://open.spotify.com/album/${album.spotifyId}`"
+              target="_blank"
+            >
+              <NuxtImg
+                :src="spotifyLogo"
+                alt=""
+                width="24"
+              />
+            </Button>
           </div>
 
           <div>

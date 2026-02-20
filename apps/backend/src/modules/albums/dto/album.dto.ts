@@ -52,6 +52,9 @@ export class AlbumPublicDto {
 
   @ApiProperty({ example: 'https://en.wikipedia.org/wiki/The_Dark_Side_of_the_Moon', nullable: true })
   wikiUrl!: string | null;
+
+  @ApiProperty({ example: '4LH4d3cOWNNsVw41Gqt2kv', nullable: true })
+  spotifyId!: string | null;
 }
 
 export class AlbumDetailDto extends AlbumPublicDto {

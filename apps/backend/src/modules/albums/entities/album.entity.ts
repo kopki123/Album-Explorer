@@ -35,6 +35,10 @@ export class AlbumEntity {
   @Index({ unique: true })
   wikiUrl!: string | null; // nullable unique：Postgres 允許多個 NULL
 
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  @Index({ unique: true })
+  spotifyId!: string | null;
+
   @ManyToMany(() => GenreEntity, (g) => g.albums)
   @JoinTable({
     name: 'album_genres',
