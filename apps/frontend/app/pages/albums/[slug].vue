@@ -164,6 +164,7 @@ async function saveAlbumRating() {
             <Button
               v-if="album.spotifyId"
               size="small"
+              severity="contrast"
               text
               as="a"
               :href="`https://open.spotify.com/album/${album.spotifyId}`"
