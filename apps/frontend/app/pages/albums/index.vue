@@ -145,39 +145,41 @@ onBeforeUnmount(() => {
       />
     </div>
 
-    <div>
-      <VirtualScroller
-        v-if="albumItems.length"
-        :items="albumRows"
-        :itemSize="520"
-        scrollHeight="75vh"
-        class="w-full"
-        @scroll-index-change="handleScrollIndexChange"
-      >
-        <template #item="{ item }">
-          <div class="pb-4">
-            <div
-              class="grid gap-4"
-              :class="{
-                'grid-cols-1': columns === 1,
-                'grid-cols-2': columns === 2,
-                'grid-cols-3': columns === 3
-              }"
-            >
-              <AlbumCard
-                v-for="album in item"
-                :key="album.id"
-                :album="album"
-                @open="goToAlbum"
-              />
+    <ClientOnly>
+      <div>
+        <VirtualScroller
+          v-if="albumItems.length"
+          :items="albumRows"
+          :itemSize="520"
+          scrollHeight="75vh"
+          class="w-full"
+          @scroll-index-change="handleScrollIndexChange"
+        >
+          <template #item="{ item }">
+            <div class="pb-4">
+              <div
+                class="grid gap-4"
+                :class="{
+                  'grid-cols-1': columns === 1,
+                  'grid-cols-2': columns === 2,
+                  'grid-cols-3': columns === 3
+                }"
+              >
+                <LazyAlbumCard
+                  v-for="album in item"
+                  :key="album.id"
+                  :album="album"
+                  @open="goToAlbum"
+                />
+              </div>
             </div>
-          </div>
-        </template>
-      </VirtualScroller>
+          </template>
+        </VirtualScroller>
 
-      <p v-if="albumItems.length === 0" class="py-12 text-center text-slate-500">
-        No albums found for this search. Try another keyword.
-      </p>
-    </div>
+        <p v-if="albumItems.length === 0" class="py-12 text-center text-slate-500">
+          No albums found for this search. Try another keyword.
+        </p>
+      </div>
+    </ClientOnly>
   </section>
 </template>

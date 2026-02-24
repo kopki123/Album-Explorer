@@ -18,6 +18,6 @@ const { startGoogleLogin } = useAuth();
       alt="google"
       class="w-5 h-5"
     />
-    <p>Sign in with Google</p>
+    <span>Sign in with Google</span>
   </Button>
 </template>

@@ -25,7 +25,7 @@ function handleOpen() {
   >
     <template #content>
       <div class="flex flex-col gap-2">
-        <NuxtImg
+        <LazyNuxtImg
           v-if="album.coverUrl"
           :src="album.coverUrl"
           :alt="album.title"

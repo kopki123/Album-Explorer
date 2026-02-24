@@ -16,7 +16,7 @@ function toggleAccountMenu(event: Event) {
 <template>
   <header class="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 p-4">
-      <AppLogo />
+      <LazyAppLogo />
 
       <div
         v-if="isAuthed"
@@ -39,7 +39,7 @@ function toggleAccountMenu(event: Event) {
         />
       </div>
 
-      <GoogleLoginButton v-else />
+      <LazyGoogleLoginButton v-else />
     </div>
   </header>
 </template>
