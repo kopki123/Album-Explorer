@@ -7,7 +7,6 @@
 Album Explorer is a full-stack Nx workspace with:
 - Nuxt 4 frontend (`apps/frontend`)
 - NestJS 11 backend (`apps/backend`)
-- Playwright frontend e2e (`apps/frontend-e2e`)
 
 The backend exposes versioned REST endpoints under `/api/v1`, and Swagger docs in non-production by default.
 
@@ -67,6 +66,8 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/albums-explorer-dev
 DB_POOL_MAX=5
 DB_SSL=false
 DB_SSL_REJECT_UNAUTHORIZED=false
+
+DB_CA_PEM=
 
 JWT_ACCESS_SECRET=replace-me
 JWT_ACCESS_EXPIRES_IN=15m
