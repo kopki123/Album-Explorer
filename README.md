@@ -1,61 +1,63 @@
-# Album Explorer (Nx Monorepo)
+# Album Explorer（Nx Monorepo）
 
-[繁體中文 README](README.zh-TW.md)
+[English README](README.md)
 
-Album Explorer is a full-stack Nx workspace with:
-- Nuxt 4 frontend (`apps/frontend`)
-- NestJS 11 backend (`apps/backend`)
-- Playwright frontend e2e (`apps/frontend-e2e`)
+![image](./.github/preview.png)
 
-The backend exposes versioned REST endpoints under `/api/v1`, and Swagger docs in non-production by default.
+Album Explorer 是一個全端 Nx workspace，包含：
+- Nuxt 4 前端（`apps/frontend`）
+- NestJS 11 後端（`apps/backend`）
+- Playwright 前端 e2e（`apps/frontend-e2e`）
 
-## Tech Stack
+後端提供以 `/api/v1` 為前綴的 REST API，並且在非正式環境預設啟用 Swagger 文件。
+
+## 技術棧
 - Nx `22.5.x`
 - Nuxt 4 + Vue 3
 - NestJS 11
-- TypeORM + PostgreSQL (local Postgres or Supabase Postgres)
+- TypeORM + PostgreSQL（本機 Postgres 或 Supabase Postgres）
 - PrimeVue + Tailwind CSS
 
-## Prerequisites
+## 先決條件
 - Node.js 22+
 - npm 10+
-- PostgreSQL 13+ (or Supabase project with Postgres connection string)
+- PostgreSQL 13+（或有 Postgres 連線字串的 Supabase 專案）
 
-## Local Development
-1. Install dependencies:
+## 本機開發
+1. 安裝相依套件：
 ```bash
 npm install
 ```
 
-2. Create env files:
+2. 建立環境變數檔：
 - `apps/backend/.env`
 - `apps/frontend/.env`
 
-3. Start backend:
+3. 啟動後端：
 ```bash
-npx nx serve backend --configuration=production
+npx nx run backend:serve --configuration=production
 ```
 
-4. Seed albums data (optional but recommended for local dev):
+4. 匯入 albums 資料（可選，但建議在本機開發時執行）：
 ```bash
-DATABASE_URL="DB connection string" npx tsx apps/backend/src/scripts/seed-albums.ts
+DATABASE_URL="DB連線字串" npx tsx apps/backend/src/scripts/seed-albums.ts
 ```
 
-5. Start frontend:
+5. 啟動前端：
 ```bash
-npx nx serve frontend
+npx nx run frontend:serve
 ```
 
-6. Open:
-- Frontend: `http://localhost:4200`
-- Backend API: `http://localhost:3001/api/v1`
-- Swagger: `http://localhost:3001/api/v1/docs`
+6. 開啟：
+- Frontend：`http://localhost:4200`
+- Backend API：`http://localhost:3001/api/v1`
+- Swagger：`http://localhost:3001/api/v1/docs`
 
-## Environment Variables
+## 環境變數
 
-### Backend (`apps/backend/.env`)
+### Backend（`apps/backend/.env`）
 
-`DATABASE_URL` is required by current backend startup.
+目前後端啟動需要 `DATABASE_URL`。
 
 ```dotenv
 NODE_ENV=development
@@ -82,11 +84,11 @@ CSRF_ALLOW_NO_ORIGIN=true
 SWAGGER_ENABLED=true
 ```
 
-Notes:
-- `fake-login` endpoint is disabled in production.
-- Backend CORS/CSRF checks are based on `FRONTEND_ORIGIN`.
+說明：
+- `fake-login` 端點在正式環境會停用。
+- 後端的 CORS/CSRF 檢查依據 `FRONTEND_ORIGIN`。
 
-### Frontend (`apps/frontend/.env`)
+### Frontend（`apps/frontend/.env`）
 
 ```dotenv
 NUXT_PUBLIC_API_BASE=http://localhost:3001/api/v1
@@ -94,26 +96,26 @@ NUXT_PUBLIC_SITE_URL=http://localhost:4200
 NUXT_PUBLIC_GTAG_ID=
 ```
 
-Notes:
-- `NUXT_PUBLIC_API_BASE` should include `/api/v1`.
-- Google Analytics (`nuxt-gtag`) only runs when `NODE_ENV=production`.
+說明：
+- `NUXT_PUBLIC_API_BASE` 應包含 `/api/v1`。
+- Google Analytics（`nuxt-gtag`）只會在 `NODE_ENV=production` 時啟用。
 
-## Data Seed
-- Seed script: `apps/backend/src/scripts/seed-albums.ts`
-- Default source file: `data/albums.json`
+## 資料匯入（Data Seed）
+- 匯入腳本：`apps/backend/src/scripts/seed-albums.ts`
+- 預設來源檔案：`data/albums.json`
 
-## Nx Commands
+## Nx 常用指令
 ```bash
 # Serve
-npx nx serve backend
-npx nx serve frontend
+npx nx run backend:serve --configuration=production
+npx nx run frontend:serve
 
 # Build
-npx nx build backend
-npx nx build frontend
+npx nx run backend:build --configuration=production
+npx nx run frontend:build
 ```
 
-## Project Structure
-- `apps/frontend/app`: Nuxt app source (`pages`, `components`, `composables`, `service`)
-- `apps/backend/src`: NestJS source (`modules`, `common`, `health`, scripts)
-- `data/`: album dataset JSON files
+## 專案結構
+- `apps/frontend/app`：Nuxt 應用程式原始碼（`pages`、`components`、`composables`、`service`）
+- `apps/backend/src`：NestJS 原始碼（`modules`、`common`、`health`、scripts）
+- `data/`：專輯資料集 JSON 檔案
