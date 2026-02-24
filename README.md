@@ -4,7 +4,7 @@
 
 ![image](./.github/preview.png)
 
-Album Explorer 是一個全端 Nx workspace，包含：
+Album Explorer 是一個全端 Nx Monorepo 專案，包含：
 - Nuxt 4 前端（`apps/frontend`）
 - NestJS 11 後端（`apps/backend`）
 
@@ -17,7 +17,7 @@ Album Explorer 是一個全端 Nx workspace，包含：
 - TypeORM + PostgreSQL（本機 Postgres 或 Supabase Postgres）
 - PrimeVue + Tailwind CSS
 
-## 先決條件
+## 環境條件
 - Node.js 22+
 - npm 10+
 - PostgreSQL 13+（或有 Postgres 連線字串的 Supabase 專案）
@@ -119,4 +119,4 @@ npx nx run frontend:build
 ## 專案結構
 - `apps/frontend/app`：Nuxt 應用程式原始碼（`pages`、`components`、`composables`、`service`）
 - `apps/backend/src`：NestJS 原始碼（`modules`、`common`、`health`、scripts）
-- `data/`：專輯資料集 JSON 檔案
+- `data/`：專輯資料 JSON 檔案
