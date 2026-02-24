@@ -23,14 +23,16 @@ const isFavorited = ref(false);
 const isRatingLoading = ref(false);
 const isRated = ref(false);
 const showRatingDialog = ref(false);
-const ratingScore = ref(0);
-const ratingReview = ref('');
+const savedRatingScore = ref(0);
+const savedRatingReview = ref('');
+const draftRatingScore = ref(0);
+const draftRatingReview = ref('');
 
 const slug = computed(() => route.params.slug as string);
 const genres = computed(() => album.value?.genres ?? []);
 const tracks = computed(() => album.value?.tracks ?? []);
 const releaseYear = computed(() => album.value?.releaseDate.slice(0, 4));
-const ratingLabel = computed(() => isRated.value ? `${ratingScore.value}/5` : 'Not rated');
+const ratingLabel = computed(() => isRated.value ? `${savedRatingScore.value}/5` : 'Not rated');
 
 const { data: album } = useAsyncData<Album>(() => fetchAlbumBySlug(slug.value), { watch: [slug] });
 
@@ -41,8 +43,10 @@ async function loadUserMeta() {
   if (!isAuthed.value) {
     isFavorited.value = false;
     isRated.value = false;
-    ratingScore.value = 0;
-    ratingReview.value = '';
+    savedRatingScore.value = 0;
+    savedRatingReview.value = '';
+    draftRatingScore.value = 0;
+    draftRatingReview.value = '';
     return;
   }
 
@@ -63,12 +67,16 @@ async function loadUserMeta() {
 
     if (ratingResult.status === 'fulfilled') {
       isRated.value = ratingResult.value.isRated;
-      ratingScore.value = ratingResult.value.rating?.score ?? 0;
-      ratingReview.value = ratingResult.value.rating?.review ?? '';
+      savedRatingScore.value = ratingResult.value.rating?.score ?? 0;
+      savedRatingReview.value = ratingResult.value.rating?.review ?? '';
+      draftRatingScore.value = savedRatingScore.value;
+      draftRatingReview.value = savedRatingReview.value;
     } else {
       isRated.value = false;
-      ratingScore.value = 0;
-      ratingReview.value = '';
+      savedRatingScore.value = 0;
+      savedRatingReview.value = '';
+      draftRatingScore.value = 0;
+      draftRatingReview.value = '';
     }
   } finally {
     isFavoriteLoading.value = false;
@@ -108,6 +116,8 @@ function openRatingDialog() {
     return;
   }
 
+  draftRatingScore.value = savedRatingScore.value;
+  draftRatingReview.value = savedRatingReview.value;
   showRatingDialog.value = true;
 }
 
@@ -117,15 +127,18 @@ async function saveAlbumRating() {
     showLoginDialog.value = true;
     return;
   }
-  if (!ratingScore.value) return;
+  if (!draftRatingScore.value) return;
 
   isRatingLoading.value = true;
   try {
+    const review = draftRatingReview.value.trim() || null;
     await saveRating(album.value.id, {
-      score: ratingScore.value,
-      review: ratingReview.value.trim() || null,
+      score: draftRatingScore.value,
+      review,
     });
     isRated.value = true;
+    savedRatingScore.value = draftRatingScore.value;
+    savedRatingReview.value = review ?? '';
     showRatingDialog.value = false;
   } finally {
     isRatingLoading.value = false;
@@ -203,7 +216,7 @@ async function saveAlbumRating() {
               />
 
               <div class="flex items-center gap-2 text-sm text-slate-500">
-                <Rating :model-value="ratingScore" readonly :cancel="false" />
+                <Rating :model-value="savedRatingScore" readonly :cancel="false" />
                 <span>{{ ratingLabel }}</span>
               </div>
             </div>
@@ -241,8 +254,8 @@ async function saveAlbumRating() {
 
     <AlbumRatingDialog
       v-model:visible="showRatingDialog"
-      v-model:score="ratingScore"
-      v-model:review="ratingReview"
+      v-model:score="draftRatingScore"
+      v-model:review="draftRatingReview"
       :loading="isRatingLoading"
       @save="saveAlbumRating"
     />

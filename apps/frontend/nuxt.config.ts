@@ -1,5 +1,6 @@
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { defineNuxtConfig } from 'nuxt/config';
+import checker from 'vite-plugin-checker';
 import Aura from '@primeuix/themes/aura';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -41,7 +42,10 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [nxViteTsPaths() as any],
+    plugins: [
+      nxViteTsPaths() as any,
+      checker({ vueTsc: false })
+    ],
   },
 
   runtimeConfig: {
