@@ -1,6 +1,6 @@
 # Album Explorer（Nx Monorepo）
 
-[English README](README.md)
+[English README](README.en-US.md)
 
 ![image](./.github/preview.png)
 
